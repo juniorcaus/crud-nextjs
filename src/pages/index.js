@@ -1,4 +1,5 @@
 import { Box, Button, Flex, FormControl, FormLabel, Input, Table, TableCaption, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { InputForm } from "../components/Input";
 
 
 export default function Home() {
@@ -11,15 +12,11 @@ export default function Home() {
     </Flex>
 
     <VStack margin='1rem' >
-      <FormControl margin='1rem' >
-        <FormLabel>Name</FormLabel>
-          <Input type='text' />
-      </FormControl>
+      <InputForm label="Nome" name="name" />
 
-      <FormControl  margin='1rem' >
-        <FormLabel>Email address</FormLabel>
-          <Input type='email' />
-      </FormControl>
+      <InputForm label="Email" name="email" />
+
+      
 
       <Button fontSize='sm' alignSelf='flex-end' colorScheme='blue' >Cadastro</Button>
     </VStack>  
