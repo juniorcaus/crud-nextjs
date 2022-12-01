@@ -5,7 +5,7 @@ export const InputForm = ({ label, name, ...res }) => {
     return(
         <FormControl  margin='1rem' >
         <FormLabel> {label} </FormLabel>
-          <Input type='email' name={name} id={name} {...res} />
+          <Input  name={name} id={name} {...res} />
       </FormControl>
     )
 }
