@@ -30,10 +30,11 @@ export default function Home() {
 
     if(!name && !email) return 
 
-    setClients(clients.concat({_id: new  Date().getMilliseconds().toString(),name, email}))
+    setClients(clients.map(client => client._id === id ? {name, email, _id: id} : client))
 
     setName('') // para limpar os textos do formulário quando cadastrar o nome e email
     setEmail('')
+    setId(null)
   }
 
 
@@ -48,6 +49,12 @@ export default function Home() {
 
   const handleChangeEmail = (text) => {
     setEmail(text)
+  }
+
+  const handleShowUpdateClientForm = (client) => {
+    setId(client._id)
+    setName(client.name)
+    setEmail(client.email)
   }
 
   return (
@@ -84,7 +91,7 @@ export default function Home() {
              <Td>{client.email}</Td>
              <Td> 
                <Flex justifyContent='space-between' >
-                 <Button size='sm' fontSize='smaller' colorScheme='yellow' mr='2'  >Editar</Button>
+                 <Button size='sm' fontSize='smaller' colorScheme='yellow' mr='2' onClick={ () => handleShowUpdateClientForm(client) } >Editar</Button>
                  <Button size='sm' fontSize='smaller' colorScheme='red' onClick={() => handleDeleteClient(client._id)} >Remover</Button>
 
                </Flex>
