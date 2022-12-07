@@ -6,6 +6,7 @@ import { InputForm } from "../components/Input";
 export default function Home() {
 
   const [clients, setClients] = useState([])
+  const [isFormOpen, setIsFormOpen] = useState(false) // const para abrir e fechar o formulario de nome e email para cadastro
 
   const [id, setId] = useState(null)
   const [name, setName] = useState('')    
@@ -22,6 +23,7 @@ export default function Home() {
 
     setName('') // para limpar os textos do formulário quando cadastrar o nome e email
     setEmail('')
+    toggleFormState() // para ocultar o menu de cadastro, quando clicar em cadastrar
   }
 
   //FUNÇÃO PARA ATUALIZAR OS DADOS DO NOME E EMAIL DO CLIENTE
@@ -35,6 +37,7 @@ export default function Home() {
     setName('') // para limpar os textos do formulário quando cadastrar o nome e email
     setEmail('')
     setId(null)
+    toggleFormState() // para ocultar o menu de cadastro, quando clicar em cadastrar
   }
 
 
@@ -55,6 +58,11 @@ export default function Home() {
     setId(client._id)
     setName(client.name)
     setEmail(client.email)
+    setIsFormOpen(true)
+  }
+
+  const toggleFormState = () => {
+    setIsFormOpen(!isFormOpen)
   }
 
   return (
@@ -62,9 +70,11 @@ export default function Home() {
 
     <Flex color='white' justifyContent='space-between' >
         <Text color='black' fontSize='2xl' > Lista de CLientes</Text>
-        <Button colorScheme='blue'>+</Button>
+        <Button colorScheme='blue' onClick={toggleFormState} > {isFormOpen ? '-' : '+'} </Button>
     </Flex>
-                                      {/* SE TIVER ID VAI PEDIR PARA FAZER UPDATE DO CADASTRO DO CLIENTE, SE NÃO VAI PEDIR PARA CRIAR UM NOVO CLIENTE */}
+
+    { isFormOpen && (
+                                            //  SE TIVER ID VAI PEDIR PARA FAZER UPDATE DO CADASTRO DO CLIENTE, SE NÃO VAI PEDIR PARA CRIAR UM NOVO CLIENTE 
     <VStack margin='1rem' as="form" onSubmit={id ? handleSubmitUpdateClient : handleSubmitCreateClient} >  
   
       <InputForm label="Nome" name="name" value={name} onChange={e => handleChangeName(e.target.value)} />
@@ -73,9 +83,10 @@ export default function Home() {
 
       <Button fontSize='sm' alignSelf='flex-end' colorScheme='blue' type="submit" >{id? 'Atualizar' : 'Cadastrar'}</Button>
     </VStack>  
+      )}
 
     <TableContainer>
-      <Table variant='simple'>
+      <Table variant='simple' margin='7'>
         <Thead bgColor='blue.500' >
           <Tr>
             <Th textColor='white' >Name</Th>
