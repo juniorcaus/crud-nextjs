@@ -10,15 +10,37 @@ export default function Home() {
 
   const [id, setId] = useState(null)
   const [name, setName] = useState('')    
-  const [email, setEmail] = useState('')    
+  const [email, setEmail] = useState('')  
+  
+  const [errors, setErros] = useState({name: null, email: null})
+
+  const isValidFormData = () =>  {
+    if(!name) {
+      setErros({name: 'Nome é requerido'})
+      return false
+    } 
+
+    if(!email) {
+      setErros({email: 'Email é requerido'})
+      return false
+    }
+
+    if(clients.some(client => client.email === email && client._id !== id)) {
+      setErros({email: "Email já cadastrado!"})
+      return
+    }
+
+    setErros({})
+    return true
+  }
 
 
 // FUNÇÃO PARA CRIAR / CADASTRAR OS DADOS DO CLIENTE COM NOEM E EMAIL
  const handleSubmitCreateClient = (e) => {
     e.preventDefault()
 
-    if(!name && !email) return 
-
+    if(!isValidFormData()) return
+    
     setClients(clients.concat({_id: new  Date().getMilliseconds().toString(),name, email}))
 
     setName('') // para limpar os textos do formulário quando cadastrar o nome e email
@@ -30,7 +52,7 @@ export default function Home() {
   const handleSubmitUpdateClient = (e) => {
     e.preventDefault()
 
-    if(!name && !email) return 
+    if(!isValidFormData()) return
 
     setClients(clients.map(client => client._id === id ? {name, email, _id: id} : client))
 
@@ -77,9 +99,9 @@ export default function Home() {
                                             //  SE TIVER ID VAI PEDIR PARA FAZER UPDATE DO CADASTRO DO CLIENTE, SE NÃO VAI PEDIR PARA CRIAR UM NOVO CLIENTE 
     <VStack margin='1rem' as="form" onSubmit={id ? handleSubmitUpdateClient : handleSubmitCreateClient} >  
   
-      <InputForm label="Nome" name="name" value={name} onChange={e => handleChangeName(e.target.value)} />
+      <InputForm label="Nome" name="name" value={name} onChange={e => handleChangeName(e.target.value)} error={errors.name} />
 
-      <InputForm label="Email" name="email" value={email} type="email" onChange={e => handleChangeEmail(e.target.value)} />
+      <InputForm label="Email" name="email" value={email} type="email" onChange={e => handleChangeEmail(e.target.value)} error={errors.email} />
 
       <Button fontSize='sm' alignSelf='flex-end' colorScheme='blue' type="submit" >{id? 'Atualizar' : 'Cadastrar'}</Button>
     </VStack>  
